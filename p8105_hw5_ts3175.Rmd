@@ -9,3 +9,29 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Problem 1
+
+```{r}
+library(tidyverse)
+
+set.seed(10)
+
+iris_with_missing = iris %>% 
+  map_df(~replace(.x, sample(1:150, 20), NA)) %>%
+  mutate(Species = as.character(Species))
+```
+
+```{r}
+iris_no_missing = function(x) {
+    if (is.numeric(x)) {
+      replace_na(x, mean(x, na.rm=TRUE))
+    }
+    else if (is.character(x)) {
+       (replace_na(x, "virginica"))}
+  }
+```
+
+```{r}
+output = map(iris_with_missing, iris_no_missing)
+```
+
